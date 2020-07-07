@@ -1,0 +1,5 @@
+qual o motivo de sua visita|ask_reason
+qual o seu cpf|ask_id
+me diga qual o seu cpf|ask_id
+qual o seu nome|ask_name
+me diga o seu nome|ask_name
