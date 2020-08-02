@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'smartdesk.apps.SmartdeskConfig',
     'corsheaders',
 ]
 

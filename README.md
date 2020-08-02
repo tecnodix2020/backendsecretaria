@@ -43,9 +43,4 @@ Lisa Project uses a number of open source projects to work properly:
 License
 ----
 
-MIT
-
-
-**Free Software, Hell Yeah!**
-
------------------
+Not yet defined!
