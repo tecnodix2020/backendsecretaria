@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'smartdesk.apps.SmartdeskConfig',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+]
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8081',
 ]
 
 ROOT_URLCONF = 'SmartDeskBackEnd.urls'
@@ -74,13 +82,18 @@ WSGI_APPLICATION = 'SmartDeskBackEnd.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+# mongodb+srv://smartdesk:<password>@cluster0.qq6s9.mongodb.net/<dbname>?retryWrites=true&w=majority
+# mongodb+srv://smartdesk:c5CX6nc1dFu09M34@cluster0.qq6s9.mongodb.net/sdlandix?retryWrites=true&w=majority
+
+import urllib
 
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'bezkoder_db',
-        'HOST': '127.0.0.1',
-        'PORT': 27017,
+        'NAME': 'sdlandix',
+        'CLIENT': {
+            'host': "mongodb+srv://smartdesk:" + urllib.parse.quote_plus('c5CX6nc1dFu09M34') + "@cluster0.qq6s9.mongodb.net/sdlandix?retryWrites=true&w=majority",
+        }
     }
 }
 
