@@ -15,6 +15,11 @@ def visits_list (request):
   if request.method == 'GET':
     visits = Visits.objects.all()
 
+    typeVisit = request.GET.get('type', None)
+
+    if typeVisit is not None:
+      visits = visits.filter(idTypeVisit=typeVisit)
+
     visits_serializer = VisitsSerializer(visits, many=True)
     return JsonResponse(visits_serializer.data, safe=False)
 
