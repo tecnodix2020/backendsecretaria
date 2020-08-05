@@ -9,4 +9,5 @@ class VisitsSerializer (serializers.ModelSerializer):
               'idTypeVisit',
               'idVisitor',
               'dateVisit',
+              'hourVisit',
               'status')

@@ -9,11 +9,17 @@ from api.serializers import VisitsSerializer
 from rest_framework.decorators import api_view
 
 import uuid
+import datetime
 
 @api_view(['GET', 'POST'])
 def visits_list (request):
   if request.method == 'GET':
     visits = Visits.objects.all()
+
+    date = request.GET.get('date', None)
+
+    if date is not None:
+      visits = visits.filter(dateVisit=date)
 
     typeVisit = request.GET.get('type', None)
 
@@ -26,7 +32,6 @@ def visits_list (request):
   elif request.method == 'POST':
     visit_data = JSONParser().parse(request)
     visit_data['id'] = str(uuid.uuid4())
-    print(visit_data)
     visit_serializer = VisitsSerializer(data=visit_data)
 
     if visit_serializer.is_valid():
@@ -34,6 +39,13 @@ def visits_list (request):
 
       return JsonResponse(visit_serializer.data, status=status.HTTP_201_CREATED)
     return JsonResponse(visit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def visits_list_desk (request):
+  visits = Visits.objects.get(dateVisit=datetime.date.today(), idTypeVisit=1)
+  visits_serializer = VisitsSerializer(visits)
+
+  return JsonResponse(visits_serializer.data, safe=False)  
 
 @api_view(['GET', 'PUT'])
 def visit_detail (request, pk):

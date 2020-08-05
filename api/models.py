@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 class Availability(models.TextChoices):
   AVAILABLE = '1'
@@ -34,7 +35,8 @@ class Visits (models.Model):
   idEmployee = models.CharField(max_length=36, blank=False)
   idTypeVisit = models.IntegerField(blank=False, choices=TYPE_VISITS, default=MEETING)
   idVisitor = models.CharField(max_length=36, blank=True)
-  dateVisit = models.DateTimeField(blank=False)
+  dateVisit = models.DateField(blank=False)
+  hourVisit = models.TimeField(blank=False, default=datetime.time(12, 00))
   status = models.IntegerField(blank=False, choices=STATUS_VISITS, default=SCHEDULED)
 
 # Employees Class
