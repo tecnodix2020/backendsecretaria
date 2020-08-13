@@ -16,6 +16,7 @@ Lisa Project uses a number of open source projects to work properly:
 * [Djongo](https://pypi.org/project/djongo/) - Use Mongodb as a backend database for your django project, without changing a single django model!
 * [django-cors-headers](https://pypi.org/project/django-cors-headers/) - A Django App that adds Cross-Origin Resource Sharing (CORS) headers to responses. This allows in-browser requests to your Django application from other origins.
 * [django-rest-swagger](https://django-rest-swagger.readthedocs.io/en/latest/) - Swagger/OpenAPI Documentation Generator for Django REST Framework.
+* [django-rest-framework-jwt](https://github.com/jpadilla/django-rest-framework-jwt) - JSON Web Token Authentication support for Django REST Framework.
 
 ### Installation
 

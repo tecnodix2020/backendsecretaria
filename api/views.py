@@ -4,14 +4,18 @@ from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
  
-from api.models import Visits
-from api.serializers import VisitsSerializer
-from rest_framework.decorators import api_view
+from api.models import Visits, Employees
+from api.serializers import VisitsSerializer, EmployeesSerializer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+
+from utils.enumerators import TypesVisits
 
 import uuid
 import datetime
 
 @api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
 def visits_list (request):
   if request.method == 'GET':
     visits = Visits.objects.all()
@@ -42,10 +46,17 @@ def visits_list (request):
 
 @api_view(['GET'])
 def visits_list_desk (request):
-  visits = Visits.objects.get(dateVisit=datetime.date.today(), idTypeVisit=1)
+  visits = Visits.objects.get(dateVisit=datetime.date.today(), status=1)
   visits_serializer = VisitsSerializer(visits)
 
-  return JsonResponse(visits_serializer.data, safe=False)  
+  return JsonResponse(visits_serializer.data, safe=False)
+
+@api_view(['GET'])
+def packages_list (request):
+  packages = Visits.objects.get(idTypeVisit=TypesVisits.PACKAGE)
+  visits_serializer = VisitsSerializer(packages)
+
+  return JsonResponse(visits_serializer.data)
 
 @api_view(['GET', 'PUT'])
 def visit_detail (request, pk):

@@ -16,8 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
+from rest_framework_swagger.views import get_swagger_view
+from rest_framework_jwt.views import obtain_jwt_token
+
+schema_view = get_swagger_view(title='SmartDesk API')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^docs/$', schema_view),
+    url(r'^login/', obtain_jwt_token),
     url(r'^', include('api.urls')),
+    url(r'^', include('users.urls'))
 ]
