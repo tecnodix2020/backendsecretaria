@@ -12,6 +12,7 @@ from rest_framework.permissions import AllowAny
 import uuid
 
 
+# Get the users list
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def users_list(request):
