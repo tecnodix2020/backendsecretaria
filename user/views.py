@@ -7,7 +7,7 @@ from user.serializers import UserSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_jwt.settings import api_settings
 
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 import uuid
 
