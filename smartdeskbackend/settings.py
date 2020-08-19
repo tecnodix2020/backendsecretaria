@@ -44,10 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Django REST Framework
     'rest_framework',
+    # CORS
     'corsheaders',
+    # Swagger
+    'rest_framework_swagger',
     'company.apps.CompanyConfig',
     'employee.apps.EmployeeConfig',
     'user.apps.UserConfig'
+
 ]
 
 MIDDLEWARE = [

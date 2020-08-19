@@ -13,6 +13,20 @@ import uuid
 import datetime
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_visits_by_type(request):
+
+    type_visits = request.GET.get('type', None)
+
+    if type_visits is not None:
+        visits = Visit.objects.get(typeVisit=type_visits)
+
+    visits_serializer = VisitSerializer(visits, many=True)
+
+    return JsonResponse(visits_serializer.data, safe=False)
+
+
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def visits_list(request):
