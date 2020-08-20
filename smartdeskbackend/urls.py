@@ -23,5 +23,6 @@ schema_view = get_swagger_view(title="SmartDesk API")
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^docs/$', schema_view),
+    url(r'^', include('visit.urls')),
     url(r'^', include('company.urls'))
 ]

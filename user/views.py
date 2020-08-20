@@ -3,7 +3,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 
 from user.models import User
-from user.serializers import UserSerializer
+from user.serializers import UserSerializer, BlackListedTokenSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_jwt.settings import api_settings
 
@@ -57,3 +57,16 @@ def authenticate(request):
         response_data = {'user': user_serializer.data, 'auth_token': token}
 
         return JsonResponse(response_data, safe=False)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logoff(request):
+    black_list_data = JSONParser().parse(request)
+    black_list_serializer = BlackListedTokenSerializer(data=black_list_data)
+
+    if black_list_serializer.is_valid():
+        black_list_serializer.save()
+
+        return JsonResponse(black_list_serializer.data, status=status.HTTP_201_CREATED)
+    return JsonResponse(black_list_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
