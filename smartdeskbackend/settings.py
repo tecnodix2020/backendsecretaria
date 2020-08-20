@@ -48,10 +48,9 @@ INSTALLED_APPS = [
     'corsheaders',
     # Swagger
     'rest_framework_swagger',
-    'company.apps.CompanyConfig',
-    'employee.apps.EmployeeConfig',
-    'user.apps.UserConfig'
-
+    'company',
+    'employee',
+    'user',
 ]
 
 MIDDLEWARE = [
