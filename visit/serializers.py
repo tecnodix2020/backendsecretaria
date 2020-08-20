@@ -4,7 +4,7 @@ from visit.models import Visit
 
 class VisitSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Visit,
+        model = Visit
         fields = ('id',
                   'idEmployee',
                   'idVisitor',

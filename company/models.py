@@ -8,4 +8,4 @@ class Company (models.Model):
     companyName = models.CharField(max_length=100, blank=False)
     observation = models.CharField(max_length=200, blank=True)
     availability = models.CharField(max_length=1, blank=False, choices=Availability.choices,
-                                    default=Availability.AVAILABLE)
+                                    default=Availability.AVAILABLE.value)

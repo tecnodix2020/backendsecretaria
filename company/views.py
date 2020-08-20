@@ -15,13 +15,14 @@ from company.serializers import CompanySerializer
 def companies_list(request):
     if request.method == 'GET':
         companies = Company.objects.all()
-
         availability = request.GET.get('availability', None)
 
         if availability is not None:
             companies = companies.filter(availability=availability)
+        print(companies)
 
         companies_serializer = CompanySerializer(companies, many=True)
+        print(companies_serializer)
         return JsonResponse(companies_serializer.data, safe=False)
     elif request.method == 'POST':
         company_data = JSONParser().parse(request)

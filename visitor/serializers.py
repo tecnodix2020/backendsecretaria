@@ -4,7 +4,7 @@ from visitor.models import Visitor
 
 
 class VisitorSerializer (serializers.ModelSerializer):
-    model = Visitor,
+    model = Visitor
     fields = ('id',
               'personalCode',
               'idCompany',

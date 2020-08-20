@@ -4,7 +4,7 @@ from user.models import User, BlackListedToken
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User,
+        model = User
         fields = ('id',
                   'name',
                   'email',
@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class BlackListedTokenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = BlackListedToken,
+        model = BlackListedToken
         fields = ('token',
                   'user',
                   'time')
