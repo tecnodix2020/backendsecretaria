@@ -4,6 +4,10 @@ from rest_framework import status
 
 from visit.models import Visit
 from visit.serializers import VisitSerializer
+
+from employee.models import Employee
+from employee.serializers import EmployeeSerializer
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 
@@ -16,15 +20,76 @@ import datetime
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_visits_by_type(request):
-
     type_visits = request.GET.get('type', None)
 
+    visits = Visit.objects.all()
+
     if type_visits is not None:
-        visits = Visit.objects.get(typeVisit=type_visits)
+        visits = visits.filter(typeVisit=type_visits)
 
     visits_serializer = VisitSerializer(visits, many=True)
 
     return JsonResponse(visits_serializer.data, safe=False)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_employees_waiting_packages(request):
+    packages = Visit.objects.all().filter(typeVisit=2)
+    visits_serializer = VisitSerializer(packages, many=True)
+    employees = Employee.objects.all()
+    employees_list = []
+
+    for package in visits_serializer.data:
+        employees_list.append(package['idEmployee'])
+
+    employees = employees.filter(id__in=employees_list)
+    employees_serializer = EmployeeSerializer(employees, many=True)
+    return JsonResponse(employees_serializer.data, safe=False)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_employees_visits(request):
+    type_visit = request.GET.get('type', None)
+    name = request.GET.get('name', None)
+
+    if type_visit is None or name is None:
+        return JsonResponse({'message': 'Request without parameters.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    visits = Visit.objects.all().filter(typeVisit=type_visit)
+
+    visits_serializer = VisitSerializer(visits, many=True)
+    employees = Employee.objects.all()
+    employees_list = []
+
+    for visit in visits_serializer.data:
+        employees_list.append(visit['idEmployee'])
+
+    employees = employees.filter(id__in=employees_list)
+
+    employees = employees.filter(name__icontains=name)
+
+    if not employees:
+        return JsonResponse({'message': 'No visits found for this employee.'}, status=status.HTTP_404_NOT_FOUND)
+
+    employees_serializer = EmployeeSerializer(employees, many=True)
+    return JsonResponse(employees_serializer.data, safe=False)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_employee_visit(request):
+    name = request.GET.get('name', None)
+    employees = Employee.objects.all()
+
+    if name is not None:
+        employees = employees.filter(name__icontains=name)
+    else:
+        return JsonResponse({'message': 'Not parameters.'}, status=status.HTTP_404_NOT_FOUND)
+
+    employee_serializer = EmployeeSerializer(employees, many=True)
+    return JsonResponse(employee_serializer.data, safe=False)
 
 
 @api_view(['GET', 'POST'])
