@@ -112,8 +112,8 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'sdlandix',
         'CLIENT': {
-            'host': "mongodb+srv://smartdesk:" + urllib.parse.quote_plus('c5CX6nc1dFu09M34') +
-                    "@cluster0.qq6s9.mongodb.net/sdlandix?retryWrites=true&w=majority",
+            'host': "mongodb+srv://tecnodix:" + urllib.parse.quote_plus('c5CX6nc1dFu09M34') +
+                    "@landix.zmekr.mongodb.net/sdlandix?retryWrites=true&w=majority",
         }
     }
 }
