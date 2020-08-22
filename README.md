@@ -66,6 +66,8 @@ The visitor personal code
 
 Example: https://backendsecretaria.herokuapp.com/visits?visitor=12345678912
 
+Observation: The visit is from the current day
+
 #### Get the employees who are waiting for orders
 https://backendsecretaria.herokuapp.com/packages/employees
 

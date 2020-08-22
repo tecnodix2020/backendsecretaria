@@ -19,6 +19,7 @@ from utils.enumerators import TypesVisits
 
 import uuid
 import datetime
+from datetime import date
 
 
 @api_view(['GET'])
@@ -70,6 +71,7 @@ def get_visits_by_visitor(request):
 
     visitor = Visitor.objects.all()
     visits = Visit.objects.all()
+    visits = visits.filter(dateVisit=str(date.today()))
     visits = visits.filter(status=1)
 
     if visitor_code is not None:
