@@ -43,6 +43,55 @@ Lisa Project uses a number of open source projects to work properly:
 
  ------------
 
+### Endpoints
+
+#### Base URL: 
+https://backendsecretaria.herokuapp.com/
+
+#### Get Visits: 
+https://backendsecretaria.herokuapp.com/visits
+
+##### Possible parameters:
+###### Types
+Meeting = 1
+
+Package = 2
+
+General = 3
+
+Example: https://backendsecretaria.herokuapp.com/visits?type=2
+
+###### Visitor
+The visitor personal code
+
+Example: https://backendsecretaria.herokuapp.com/visits?visitor=12345678912
+
+#### Get the employees who are waiting for orders
+https://backendsecretaria.herokuapp.com/packages/employees
+
+##### Possible parameters:
+###### Types
+Meeting = 1
+
+Package = 2
+
+General = 3
+
+Example: https://backendsecretaria.herokuapp.com/packages/employees?type=2
+
+#### Get top 3 employees
+https://backendsecretaria.herokuapp.com/visits/top3
+
+##### Possible parameters:
+###### Types
+Meeting = 1
+
+Package = 2
+
+General = 3
+
+Example: https://backendsecretaria.herokuapp.com/visits/top3?type=1
+
 License
 ----
 
