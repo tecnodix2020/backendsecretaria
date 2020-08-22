@@ -4,11 +4,12 @@ from visitor.models import Visitor
 
 
 class VisitorSerializer (serializers.ModelSerializer):
-    model = Visitor
-    fields = ('id',
-              'personalCode',
-              'idCompany',
-              'name',
-              'email',
-              'observation',
-              'availability')
+    class Meta:
+        model = Visitor
+        fields = ('id',
+                  'personalCode',
+                  'idCompany',
+                  'name',
+                  'email',
+                  'observation',
+                  'availability')

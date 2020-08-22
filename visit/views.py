@@ -1,9 +1,13 @@
+from django.db.models import Count
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
 from visit.models import Visit
 from visit.serializers import VisitSerializer
+
+from visitor.models import Visitor
+from visitor.serializers import VisitorSerializer
 
 from employee.models import Employee
 from employee.serializers import EmployeeSerializer
@@ -19,16 +23,68 @@ import datetime
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+def get_top3_of_visits(request):
+    employees_list = []
+    type_visit = request.GET.get('type', None)
+    if type_visit is not None:
+        visits = Visit.objects.values('idEmployee')\
+            .filter(typeVisit=type_visit)\
+            .annotate(num_visits=Count('idEmployee'))\
+            .order_by('-num_visits')
+    else:
+        visits = Visit.objects.values('idEmployee').annotate(num_visits=Count('idEmployee')).order_by('-num_visits')
+
+    length = 3
+    if len(visits) <= 3:
+        length = len(visits)
+
+    for i in range(length):
+        employees_list.append(visits[i]['idEmployee'])
+
+    employees = Employee.objects.all()
+    employees = employees.filter(id__in=employees_list)
+    employees_serializer = EmployeeSerializer(employees, many=True)
+    return JsonResponse(employees_serializer.data, safe=False)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
 def get_visits_by_type(request):
-    type_visits = request.GET.get('type', None)
+    if request.GET.get('visitor', None) is not None:
+        return get_visits_by_visitor(request)
+    else:
+        type_visits = request.GET.get('type', None)
 
+        visits = Visit.objects.all()
+
+        if type_visits is not None:
+            visits = visits.filter(typeVisit=type_visits)
+
+        visits_serializer = VisitSerializer(visits, many=True)
+
+        return JsonResponse(visits_serializer.data, safe=False)
+
+
+def get_visits_by_visitor(request):
+    visitor_code = request.GET.get('visitor', None)
+
+    visitor = Visitor.objects.all()
     visits = Visit.objects.all()
+    visits = visits.filter(status=1)
 
-    if type_visits is not None:
-        visits = visits.filter(typeVisit=type_visits)
+    if visitor_code is not None:
+        visitor = visitor.filter(personalCode=visitor_code)
+
+    if not visitor:
+        return JsonResponse({'message': 'Visitor not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    visitor_serializer = VisitorSerializer(visitor, many=True)
+    visits = visits.filter(idVisitor=visitor_serializer.data[0]['id'])
+
+    if not visits:
+        return JsonResponse({'message': 'Visit not found for this visitor.'}, status=status.HTTP_404_NOT_FOUND)
 
     visits_serializer = VisitSerializer(visits, many=True)
-
     return JsonResponse(visits_serializer.data, safe=False)
 
 

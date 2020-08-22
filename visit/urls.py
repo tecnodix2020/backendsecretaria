@@ -8,6 +8,7 @@ urlpatterns = [
   url(r'^api/visits/(?P<pk>[0-9]+)$', views.visit_detail),
 
   url(r'^visits$', views.get_visits_by_type),
+  url(r'^visits/top3$', views.get_top3_of_visits),
   url(r'^packages/employees', views.get_employees_waiting_packages),
   url(r'^visits/employee$', views.get_employee_visit),
   url(r'^visits/employees', views.get_employees_visits)
