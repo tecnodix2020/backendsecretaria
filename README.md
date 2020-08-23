@@ -94,6 +94,18 @@ General = 3
 
 Example: https://backendsecretaria.herokuapp.com/visits/top3?type=1
 
+#### Get Employees
+https://backendsecretaria.herokuapp.com/employees
+##### Possible parameters:
+###### Name
+
+Any name or piece of name (It is not case-sensitive)
+
+Examples: https://backendsecretaria.herokuapp.com/employees?name=guilherme
+
+https://backendsecretaria.herokuapp.com/employees?name=vas
+
+
 License
 ----
 
