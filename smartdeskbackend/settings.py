@@ -49,6 +49,9 @@ INSTALLED_APPS = [
     'corsheaders',
     # Swagger
     'rest_framework_swagger',
+    # FCM Notification
+    'fcm_django',
+    # Apps
     'company',
     'employee',
     'user',
@@ -162,3 +165,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+FCM_DJANGO_SETTINGS = {
+    "FCM_SERVER_KEY": "AIzaSyDQMCi3VQTuhTqRF3EOV1HzKPXegbgO-iQ"
+}

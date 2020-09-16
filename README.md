@@ -48,6 +48,16 @@ Lisa Project uses a number of open source projects to work properly:
 #### Base URL: 
 https://backendsecretaria.herokuapp.com/
 
+#### Authentication:
+https://backendsecretaria.herokuapp.com/auth
+##### Type Request
+AUTH
+##### Body
+{
+    "username": "gferreira",
+    "password": "12345678"
+}
+
 #### Get Visits: 
 https://backendsecretaria.herokuapp.com/visits
 

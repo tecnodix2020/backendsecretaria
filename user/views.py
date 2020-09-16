@@ -3,11 +3,11 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 
 from user.models import User
-from user.serializers import UserSerializer, BlackListedTokenSerializer
+from user.serializers import UserSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_jwt.settings import api_settings
 
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 
 import uuid
 
@@ -18,6 +18,9 @@ import uuid
 def users_list(request):
     if request.method == 'GET':
         users = User.objects.all()
+
+        users_serializer = UserSerializer(users, many=True)
+        return JsonResponse(users_serializer.data, safe=False, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
         user_data = JSONParser().parse(request)
@@ -31,42 +34,30 @@ def users_list(request):
         return JsonResponse(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['AUTH'])
 @permission_classes([AllowAny])
-def authenticate(request):
-    jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-    jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
-
-    if request.method == 'GET':
-        user = User.objects.all()
-
-        username = request.GET.get('username', None)
-        password = request.GET.get('password', None)
-
-        if username is not None and password is not None:
-            user = user.filter(username=username)
-            user = user.filter(password=password)
+def authentication(request):
+    if request.method == 'AUTH':
+        user_data = JSONParser().parse(request)
+        user = User.objects.filter(username=user_data['username'],
+                                   password=user_data['password']).values('id', 'name', 'email', 'username')
 
         user_serializer = UserSerializer(user, many=True)
 
-        user = User(user_serializer.data)
+        if user_serializer.data:
+            user = User(user_serializer.data)
 
-        payload = jwt_payload_handler(user)
-        token = jwt_encode_handler(payload)
+            jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+            jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
-        response_data = {'user': user_serializer.data, 'auth_token': token}
+            payload = jwt_payload_handler(user)
+            token = jwt_encode_handler(payload)
 
-        return JsonResponse(response_data, safe=False)
-
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def logoff(request):
-    black_list_data = JSONParser().parse(request)
-    black_list_serializer = BlackListedTokenSerializer(data=black_list_data)
-
-    if black_list_serializer.is_valid():
-        black_list_serializer.save()
-
-        return JsonResponse(black_list_serializer.data, status=status.HTTP_201_CREATED)
-    return JsonResponse(black_list_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({"user": user_serializer.data, 'auth_token': token},
+                                status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({"message": "Invalid username and/or password."},
+                                safe=False,
+                                status=status.HTTP_401_UNAUTHORIZED)
+    else:
+        return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
