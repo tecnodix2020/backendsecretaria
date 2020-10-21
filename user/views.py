@@ -1,4 +1,5 @@
 from django.http.response import JsonResponse
+from fcm_django.models import FCMDevice
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
@@ -34,6 +35,7 @@ def users_list(request):
         return JsonResponse(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Authentication
 @api_view(['AUTH'])
 @permission_classes([AllowAny])
 def authentication(request):
@@ -61,3 +63,12 @@ def authentication(request):
                                 status=status.HTTP_401_UNAUTHORIZED)
     else:
         return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def notification(request):
+    devices = FCMDevice.objects.all()
+    print(devices)
+
+    devices.send_message(title="Title", body="Message", data={"teste": "teste"})

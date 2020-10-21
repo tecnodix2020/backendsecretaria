@@ -172,6 +172,7 @@ def visits_list(request):
     elif request.method == 'POST':
         visit_data = JSONParser().parse(request)
         visit_data['id'] = str(uuid.uuid4())
+        visit_data['status'] = 1
         visit_serializer = VisitSerializer(data=visit_data)
 
         if visit_serializer.is_valid():

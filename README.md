@@ -31,13 +31,8 @@ Lisa Project uses a number of open source projects to work properly:
 
 ------------
 
-#### Building for source
+### Building for source
 ---------
-
-#### Kubernetes + Google Cloud
-
----------------------------
-
 
 ### Todos
 
@@ -53,10 +48,12 @@ https://backendsecretaria.herokuapp.com/auth
 ##### Type Request
 AUTH
 ##### Body
+```sh
 {
     "username": "gferreira",
     "password": "12345678"
 }
+```
 
 #### Get Visits: 
 https://backendsecretaria.herokuapp.com/visits
@@ -70,6 +67,22 @@ Package = 2
 General = 3
 
 Example: https://backendsecretaria.herokuapp.com/visits?type=2
+
+#### Post Visits: 
+https://backendsecretaria.herokuapp.com/api/visits
+
+##### Type Request
+POST
+##### Body
+```sh
+{
+    "idEmployee": "44a7b571-47d6-438e-8c7b-34c1094d0d5a",
+    "idTypeVisit": "2",
+    "dateVisit": "2020-08-05"
+}
+```
+
+Example: https://backendsecretaria.herokuapp.com/api/visits
 
 ###### Visitor
 The visitor personal code

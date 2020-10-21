@@ -4,5 +4,6 @@ from user import views
 
 urlpatterns = [
     url(r'^users$', views.users_list),
-    url(r'^auth$', views.authentication)
+    url(r'^auth$', views.authentication),
+    url(r'^notify$', views.notification)
 ]
