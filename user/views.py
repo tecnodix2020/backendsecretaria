@@ -36,10 +36,10 @@ def users_list(request):
 
 
 # Authentication
-@api_view(['AUTH'])
+@api_view(['POST'])
 @permission_classes([AllowAny])
 def authentication(request):
-    if request.method == 'AUTH':
+    if request.method == 'POST':
         user_data = JSONParser().parse(request)
         user = User.objects.filter(username=user_data['username'],
                                    password=user_data['password']).values('id', 'name', 'email', 'username')
