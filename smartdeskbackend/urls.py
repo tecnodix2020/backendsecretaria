@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^', include('visit.urls')),
     url(r'^', include('company.urls')),
     url(r'^', include('employee.urls')),
-    url(r'^', include('user.urls'))
+    url(r'^', include('user.urls')),
+    url(r'^', include('message.urls'))
 ]

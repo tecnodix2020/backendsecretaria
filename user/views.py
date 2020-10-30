@@ -1,5 +1,4 @@
 from django.http.response import JsonResponse
-from fcm_django.models import FCMDevice
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
@@ -55,7 +54,7 @@ def authentication(request):
             payload = jwt_payload_handler(user)
             token = jwt_encode_handler(payload)
 
-            return JsonResponse({"user": user_serializer.data, 'auth_token': token},
+            return JsonResponse({"user": user_serializer.data[0], 'auth_token': token},
                                 status=status.HTTP_200_OK)
         else:
             return JsonResponse({"message": "Invalid username and/or password."},
@@ -64,11 +63,24 @@ def authentication(request):
     else:
         return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
 
-
-@api_view(['POST'])
+@api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([AllowAny])
-def notification(request):
-    devices = FCMDevice.objects.all()
-    print(devices)
+def user_detail(request, pk):
+    try:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return JsonResponse({'message': 'The user does not exists.'}, status=status.HTTP_404_NOT_FOUND)
 
-    devices.send_message(title="Title", body="Message", data={"teste": "teste"})
+    if request.method == 'GET':
+        user_serializer = UserSerializer(user)
+        return JsonResponse(user_serializer.data)
+    elif request.method == 'PUT':
+        user_data = JSONParser().parse(request)
+        user_serializer = UserSerializer(user, data=user_data)
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return JsonResponse(user_serializer.data)
+        return JsonResponse(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        user.delete()
+        return JsonResponse({'message': 'User was deleted successfully.'})

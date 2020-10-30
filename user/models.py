@@ -8,5 +8,6 @@ class User(models.Model):
     email = models.EmailField(max_length=100, blank=False, unique=True)
     username = models.CharField(max_length=100, blank=False, unique=True)
     password = models.CharField(max_length=100, blank=False, default='12345678')
+    appToken = models.CharField(max_length=100, blank=True, unique=True)
     availability = models.CharField(max_length=1, blank=False, choices=Availability.choices,
                                     default=Availability.AVAILABLE)
