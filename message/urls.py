@@ -4,5 +4,5 @@ from message import views
 urlpatterns = [
   url(r'^messages$', views.messages),
   url(r'^messages/store$', views.post_message),
-  url(r'^messages/delete/(?P<pk>)$', views.delete_message)
+  url(r'^messages/delete/(?P<pk>\d+)$', views.delete_message)
 ]

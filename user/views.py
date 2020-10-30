@@ -63,6 +63,7 @@ def authentication(request):
     else:
         return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([AllowAny])
 def user_detail(request, pk):
