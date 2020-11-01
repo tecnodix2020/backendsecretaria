@@ -180,6 +180,8 @@ def visits_list(request):
 
             return JsonResponse(visit_serializer.data, status=status.HTTP_201_CREATED)
         return JsonResponse(visit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return JsonResponse({'message': 'The request is not valid.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -202,7 +204,7 @@ def packages_list(request):
 def visit_detail(request, pk):
     try:
         visit = Visit.objects.get(pk=pk)
-    except:
+    except Visit.DoesNotExist:
         return JsonResponse({'message': 'The visit does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
@@ -216,3 +218,5 @@ def visit_detail(request, pk):
             visit_serializer.save()
             return JsonResponse(visit_serializer.data)
         return JsonResponse(visit_serializer.errors, status=status.HTTP_400_BAD_REQUESTs)
+    else:
+        return JsonResponse({'message': 'The request is not valid.'}, status=status.HTTP_400_BAD_REQUEST)

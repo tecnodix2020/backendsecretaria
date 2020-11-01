@@ -5,16 +5,13 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 
-import uuid
-from datetime import date
-
 from message.models import Message
 from message.serializers import MessageSerializer
 
 
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
-def messages(request):
+def messages_list(request):
     if request.method == 'GET':
         type_message = request.GET.get('type', None)
 
@@ -35,6 +32,7 @@ def messages(request):
             return JsonResponse(message_serializer.data, status=status.HTTP_201_CREATED)
 
         return JsonResponse(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
