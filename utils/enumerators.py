@@ -33,3 +33,5 @@ class TypesMessages (models.IntegerChoices):
 class StatusMessages (models.IntegerChoices):
     UNREAD = 1
     READ = 2
+    SENT = 3
+    RECEIVED = 4

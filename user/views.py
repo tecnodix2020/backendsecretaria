@@ -2,6 +2,7 @@ from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
+from employee.serializers import EmployeeSerializer
 from user.models import User
 from user.serializers import UserSerializer
 from rest_framework.decorators import api_view, permission_classes
@@ -23,15 +24,32 @@ def users_list(request):
         return JsonResponse(users_serializer.data, safe=False, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
+        user_saved = False
         user_data = JSONParser().parse(request)
         user_data['id'] = str(uuid.uuid4())
         user_serializer = UserSerializer(data=user_data)
 
         if user_serializer.is_valid():
             user_serializer.save()
+            user_saved = True
 
-            return JsonResponse(user_serializer.data, status=status.HTTP_201_CREATED)
+        if user_saved:
+            if post_employee(user_data):
+                return JsonResponse(user_serializer.data, status=status.HTTP_201_CREATED)
+
         return JsonResponse(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def post_employee(user_data):
+    employee_data = {'id': user_data['id'], 'name': user_data['name'], 'email': user_data['email']}
+
+    employee_serializer = EmployeeSerializer(data=employee_data)
+
+    if employee_serializer.is_valid():
+        employee_serializer.save()
+        return True
+
+    return False
 
 
 # Authentication

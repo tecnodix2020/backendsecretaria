@@ -78,7 +78,11 @@ POST
 {
     "idEmployee": "44a7b571-47d6-438e-8c7b-34c1094d0d5a",
     "idTypeVisit": "2",
-    "dateVisit": "2020-08-05"
+    "dateVisit": "2020-08-05",
+    "subs": [
+        "1ef6fda7-d153-498e-8d25-1addb50c5dd9",
+        "44a7b5c8-47d6-438e-8c7b-34c1094d0d5a"
+    ]
 }
 ```
 
@@ -127,6 +131,52 @@ Any name or piece of name (It is not case-sensitive)
 Examples: https://backendsecretaria.herokuapp.com/employees?name=guilherme
 
 https://backendsecretaria.herokuapp.com/employees?name=vas
+
+### Store Users
+https://backendsecretaria.herokuapp.com/users
+
+##### Type Request
+POST
+##### Body
+```sh
+{
+    "name": "Felipe Freitas",
+    "email": "ffreitas@getmail.com.br",
+    "username": "ffreitas"
+}
+```
+
+### Get User
+https://backendsecretaria.herokuapp.com/users/:id
+
+##### Type Request
+GET
+
+Example: https://backendsecretaria.herokuapp.com/users/518a69e3-0110-404f-8047-4a59ceef1d8d
+
+### Store Visitor
+https://backendsecretaria.herokuapp.com/visitors
+
+##### Type Request
+POST
+##### Body
+```sh
+{
+    "personalCode": "12345678913",
+    "idCompany": "f556895f-efa3-4428-b6a5-f90dd7e3a94e",
+    "name": "Italo Gomes",
+    "email": "italo@gmail.com",
+    "observation": "Nenhuma observação"
+}
+```
+
+### Get Visitor
+https://backendsecretaria.herokuapp.com/visitors/:id
+
+##### Type Request
+GET
+
+Example: https://backendsecretaria.herokuapp.com/visitors/08dc50d5-49b8-467e-a4fd-720d14d230a2
 
 
 License

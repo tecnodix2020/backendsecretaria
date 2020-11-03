@@ -1,4 +1,6 @@
 from django.db import models
+from djongo.models import ArrayField
+
 from utils.enumerators import TypesVisits, StatusVisits
 
 import datetime
@@ -6,8 +8,8 @@ import datetime
 
 class Visit(models.Model):
     id = models.CharField(max_length=36, blank=False, primary_key=True)
-    idEmployee = models.CharField(max_length=36, blank=True)
-    idVisitor = models.CharField(max_length=36, blank=False)
+    idEmployee = models.CharField(max_length=36, blank=False)
+    idVisitor = models.CharField(max_length=36, blank=True)
     typeVisit = models.IntegerField(blank=False, choices=TypesVisits.choices,
                                     default=TypesVisits.MEETING.value)
     dateVisit = models.DateField(blank=False, default=datetime.date.today())

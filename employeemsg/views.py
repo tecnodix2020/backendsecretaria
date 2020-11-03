@@ -31,6 +31,7 @@ def msg_by_employee(request):
 
         if message_serializer.is_valid():
             message_serializer.save()
+            send_notification(message_serializer.data)
             return JsonResponse(message_serializer.data, status=status.HTTP_201_CREATED)
 
         return JsonResponse(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -56,7 +57,7 @@ def msg_emp_detail(request, pk):
         return JsonResponse({'message': 'The request is not valid.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-def send_notification(request):
+def send_notification(message):
     push_service = FCMNotification(api_key="AIzaSyDWOhxbvE3bDHLv8ymwRauWJOEM2EFkZ8I")
     registration_id = "<device registration_id>"
     message_title = "Uber update"

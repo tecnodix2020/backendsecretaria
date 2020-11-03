@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.models import Count
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
@@ -20,6 +21,9 @@ from utils.enumerators import TypesVisits
 import uuid
 import datetime
 from datetime import date
+
+from visitsubs.models import VisitSubs
+from visitsubs.serializers import VisitSubsSerializer
 
 
 @api_view(['GET'])
@@ -167,21 +171,43 @@ def visits_list(request):
             visits = visits.filter(idTypeVisit=type_visit)
 
         visits_serializer = VisitSerializer(visits, many=True)
+
         return JsonResponse(visits_serializer.data, safe=False)
 
     elif request.method == 'POST':
         visit_data = JSONParser().parse(request)
         visit_data['id'] = str(uuid.uuid4())
-        visit_data['status'] = 1
+        subs = visit_data['subs']
+        del visit_data['subs']
         visit_serializer = VisitSerializer(data=visit_data)
 
         if visit_serializer.is_valid():
             visit_serializer.save()
 
-            return JsonResponse(visit_serializer.data, status=status.HTTP_201_CREATED)
-        return JsonResponse(visit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            if save_sub_employees(visit_data['id'], subs):
+                return JsonResponse(visit_serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return JsonResponse(visit_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return JsonResponse({'Object is not valid: ': visit_serializer.data, 'Errors: ': visit_serializer.errors},
+                                status=status.HTTP_400_BAD_REQUEST)
     else:
         return JsonResponse({'message': 'The request is not valid.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def save_sub_employees(id_visit, subs):
+    result = False
+    for sub in subs:
+        sub_data = {'id': str(uuid.uuid4()), 'idVisit': id_visit, 'idEmployee': sub}
+        visitsub_serializer = VisitSubsSerializer(data=sub_data)
+
+        if visitsub_serializer.is_valid():
+            visitsub_serializer.save()
+            result = True
+        result = False
+    return result
+
+    return False
 
 
 @api_view(['GET'])
