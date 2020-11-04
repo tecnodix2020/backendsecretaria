@@ -1,3 +1,5 @@
+from email.utils import parseaddr
+
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
@@ -30,8 +32,11 @@ def users_list(request):
         user_serializer = UserSerializer(data=user_data)
 
         if user_serializer.is_valid():
-            user_serializer.save()
-            user_saved = True
+            if '@landix.com.br' in parseaddr(user_data['email'])[1]:
+                user_serializer.save()
+                user_saved = True
+            else:
+                return JsonResponse({'message': 'The email is invalid!'}, status=status.HTTP_401_UNAUTHORIZED)
 
         if user_saved:
             if post_employee(user_data):
