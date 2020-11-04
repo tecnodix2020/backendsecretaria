@@ -1,4 +1,6 @@
+import crypt
 from email.utils import parseaddr
+from hmac import compare_digest as compare_hash
 
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
@@ -29,10 +31,12 @@ def users_list(request):
         user_saved = False
         user_data = JSONParser().parse(request)
         user_data['id'] = str(uuid.uuid4())
+        if user_data['password']:
+            user_data['password'] = crypt.crypt(user_data['password'])
         user_serializer = UserSerializer(data=user_data)
 
         if user_serializer.is_valid():
-            if '@landix.com.br' in parseaddr(user_data['email'])[1]:
+            if '@landix.com.br' in parseaddr(user_data['username'])[1]:
                 user_serializer.save()
                 user_saved = True
             else:
@@ -46,7 +50,7 @@ def users_list(request):
 
 
 def post_employee(user_data):
-    employee_data = {'id': user_data['id'], 'name': user_data['name'], 'email': user_data['email']}
+    employee_data = {'id': user_data['id'], 'name': user_data['name'], 'email': user_data['username']}
 
     employee_serializer = EmployeeSerializer(data=employee_data)
 
@@ -63,12 +67,13 @@ def post_employee(user_data):
 def authentication(request):
     if request.method == 'POST':
         user_data = JSONParser().parse(request)
-        user = User.objects.filter(username=user_data['username'],
-                                   password=user_data['password']).values('id', 'name', 'email', 'username')
-
-        user_serializer = UserSerializer(user, many=True)
-
-        if user_serializer.data:
+        plain_pass = user_data['password']
+        user_data['password'] = crypt.crypt(user_data['password'])
+        user = User.objects.filter(username=user_data['username']).values('id', 'name', 'username', 'password')
+        print(user[0]['password'])
+        if compare_hash(user[0]['password'], crypt.crypt(plain_pass, user[0]['password'])):
+            user = user.values('id', 'name', 'username')
+            user_serializer = UserSerializer(user, many=True)
             user = User(user_serializer.data)
 
             jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
