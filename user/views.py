@@ -70,8 +70,8 @@ def authentication(request):
         plain_pass = user_data['password']
         user_data['password'] = crypt.crypt(user_data['password'])
         user = User.objects.filter(username=user_data['username']).values('id', 'name', 'username', 'password')
-        print(user[0]['password'])
-        if compare_hash(user[0]['password'], crypt.crypt(plain_pass, user[0]['password'])):
+
+        if user and compare_hash(user[0]['password'], crypt.crypt(plain_pass, user[0]['password'])):
             user = user.values('id', 'name', 'username')
             user_serializer = UserSerializer(user, many=True)
             user = User(user_serializer.data)
