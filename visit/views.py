@@ -1,9 +1,10 @@
-from django.db import transaction
 from django.db.models import Count
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
+from user.models import User
+from user.serializers import UserSerializer
 from visit.models import Visit
 from visit.serializers import VisitSerializer
 
@@ -22,7 +23,6 @@ import uuid
 import datetime
 from datetime import date
 
-from visitsubs.models import VisitSubs
 from visitsubs.serializers import VisitSubsSerializer
 
 
@@ -32,9 +32,9 @@ def get_top3_of_visits(request):
     employees_list = []
     type_visit = request.GET.get('type', None)
     if type_visit is not None:
-        visits = Visit.objects.values('idEmployee')\
-            .filter(typeVisit=type_visit)\
-            .annotate(num_visits=Count('idEmployee'))\
+        visits = Visit.objects.values('idEmployee') \
+            .filter(typeVisit=type_visit) \
+            .annotate(num_visits=Count('idEmployee')) \
             .order_by('-num_visits')
     else:
         visits = Visit.objects.values('idEmployee').annotate(num_visits=Count('idEmployee')).order_by('-num_visits')
@@ -172,25 +172,29 @@ def visits_list(request):
 
         visits_serializer = VisitSerializer(visits, many=True)
 
-        return JsonResponse(visits_serializer.data, safe=False)
+        return JsonResponse(visits_serializer.data, safe=False, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
         visit_data = JSONParser().parse(request)
         visit_data['id'] = str(uuid.uuid4())
-        subs = visit_data['subs']
-        del visit_data['subs']
-        visit_serializer = VisitSerializer(data=visit_data)
 
+        index = 0
+        for user_id in visit_data['subs']:
+            try:
+                user = User.objects.get(id=user_id)
+                user_serializer = UserSerializer(user)
+                visit_data['subs'][index] = user_serializer.data
+                index = index + 1
+            except User.DoesNotExist:
+                return JsonResponse({'message': 'The user does not exists.'}, status=status.HTTP_404_NOT_FOUND)
+
+        visit_serializer = VisitSerializer(data=visit_data)
         if visit_serializer.is_valid():
             visit_serializer.save()
-
-            if save_sub_employees(visit_data['id'], subs):
-                return JsonResponse(visit_serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                return JsonResponse(visit_serializer.data, status=status.HTTP_400_BAD_REQUEST)
         else:
             return JsonResponse({'Object is not valid: ': visit_serializer.data, 'Errors: ': visit_serializer.errors},
                                 status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse(visit_serializer.data, status=status.HTTP_201_CREATED)
     else:
         return JsonResponse({'message': 'The request is not valid.'}, status=status.HTTP_400_BAD_REQUEST)
 

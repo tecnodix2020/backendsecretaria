@@ -11,4 +11,5 @@ class VisitSerializer(serializers.ModelSerializer):
                   'typeVisit',
                   'dateVisit',
                   'hourVisit',
-                  'status')
+                  'status',
+                  'subs')

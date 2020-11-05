@@ -1,6 +1,7 @@
 from django.db import models
-from djongo.models import ArrayField
+from djongo import models
 
+from user.models import User
 from utils.enumerators import TypesVisits, StatusVisits
 
 import datetime
@@ -16,3 +17,4 @@ class Visit(models.Model):
     hourVisit = models.TimeField(blank=False, default=datetime.time(12, 00))
     status = models.IntegerField(blank=False, choices=StatusVisits.choices,
                                  default=StatusVisits.SCHEDULED.value)
+    subs = models.ArrayField(model_container=User, blank=True)
