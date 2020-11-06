@@ -2,9 +2,10 @@ from django.db.models import Count
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
+import json
 
 from user.models import User
-from user.serializers import UserSerializer
+from user.serializers import UserSerializer, UserVisitSerializer
 from visit.models import Visit
 from visit.serializers import VisitSerializer
 
@@ -171,6 +172,18 @@ def visits_list(request):
             visits = visits.filter(idTypeVisit=type_visit)
 
         visits_serializer = VisitSerializer(visits, many=True)
+
+        index = 0
+        for visit in visits_serializer.data:
+            visit['subs'] = json.loads(visit['subs'])
+            for user_aux in visit['subs']:
+                try:
+                    user = User.objects.get(id=user_aux['id'])
+                    user_serializer = UserVisitSerializer(user)
+                    visit['subs'][index] = user_serializer.data
+                    index = index + 1
+                except User.DoesNotExist:
+                    return JsonResponse({'message': 'The user does not exists.'}, status=status.HTTP_404_NOT_FOUND)
 
         return JsonResponse(visits_serializer.data, safe=False, status=status.HTTP_200_OK)
 

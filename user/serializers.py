@@ -10,3 +10,11 @@ class UserSerializer(serializers.ModelSerializer):
                   'username',
                   'password',
                   'availability')
+
+
+class UserVisitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id',
+                  'name',
+                  'username')
