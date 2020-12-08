@@ -20,16 +20,28 @@ def visitors_list(request):
         return JsonResponse(visitors_serializer.data, safe=False, status=status.HTTP_200_OK)
     elif request.method == 'POST':
         visitor_data = JSONParser().parse(request)
-        visitor_data['id'] = str(uuid.uuid4())
-        visitor_serializer = VisitorSerializer(data=visitor_data)
 
-        if visitor_serializer.is_valid():
-            visitor_serializer.save()
-            return JsonResponse(visitor_serializer.data, status=status.HTTP_201_CREATED)
+        # Verify the personal code
+        try:
+            Visitor.objects.get(personalCode=visitor_data['personalCode'])
+            return JsonResponse({'message': 'The personal code already exists.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Visitor.DoesNotExist:
+            # Verify the email
+            try:
+                Visitor.objects.get(email=visitor_data['email'])
+                return JsonResponse({'message': 'The email already exists.'},
+                                    status=status.HTTP_406_NOT_ACCEPTABLE)
+            except Visitor.DoesNotExist:
+                visitor_data['id'] = str(uuid.uuid4())
+                visitor_serializer = VisitorSerializer(data=visitor_data)
 
-        return JsonResponse(visitor_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
+                if visitor_serializer.is_valid():
+                    visitor_serializer.save()
+                    return JsonResponse(visitor_serializer.data, status=status.HTTP_201_CREATED)
+
+                return JsonResponse(visitor_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
