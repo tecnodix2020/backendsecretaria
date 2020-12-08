@@ -40,8 +40,8 @@ def visitors_list(request):
                     return JsonResponse(visitor_serializer.data, status=status.HTTP_201_CREATED)
 
                 return JsonResponse(visitor_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
