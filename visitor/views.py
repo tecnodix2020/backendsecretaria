@@ -50,7 +50,7 @@ def visitor_detail(request, pk):
     try:
         visitor = Visitor.objects.get(pk=pk)
     except Visitor.DoesNotExist:
-        return JsonResponse({'message': 'The visitor does not exists.'}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'message': 'The visitor does not exists.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     if request.method == 'GET':
         visitor_serializer = VisitorSerializer(visitor)

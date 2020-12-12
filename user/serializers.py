@@ -9,6 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
                   'name',
                   'username',
                   'password',
+                  'appToken',
                   'availability')
 
 

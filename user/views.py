@@ -98,7 +98,7 @@ def user_detail(request, pk):
     try:
         user = User.objects.get(pk=pk)
     except User.DoesNotExist:
-        return JsonResponse({'message': 'The user does not exists.'}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'message': 'The user does not exists.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     if request.method == 'GET':
         user_serializer = UserSerializer(user)
@@ -106,6 +106,7 @@ def user_detail(request, pk):
     elif request.method == 'PUT':
         user_data = JSONParser().parse(request)
         user_serializer = UserSerializer(user, data=user_data)
+        print(user_serializer)
         if user_serializer.is_valid():
             user_serializer.save()
             return JsonResponse(user_serializer.data)

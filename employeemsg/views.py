@@ -45,14 +45,14 @@ def msg_emp_detail(request, pk):
     try:
         message = EmployeeMessage.objects.get(pk=pk)
     except EmployeeMessage.DoesNotExist:
-        return JsonResponse({'message': 'The message does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'message': 'The message does not exist.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     if request.method == 'GET':
         message_serializer = EmployeeMsgSerializer(message)
         return JsonResponse(message_serializer.data)
     elif request.method == 'DELETE':
         message.delete()
-        return JsonResponse({'message': 'The message was deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse({'message': 'The message was deleted successfully'}, status=status.HTTP_200_OK)
     else:
         return JsonResponse({'message': 'The request is not valid.'}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -83,13 +83,13 @@ def get_visits_by_visitor(request):
         visitor = visitor.filter(personalCode=visitor_code)
 
     if not visitor:
-        return JsonResponse({'message': 'Visitor not found.'}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'message': 'Visitor not found.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     visitor_serializer = VisitorSerializer(visitor, many=True)
     visits = visits.filter(idVisitor=visitor_serializer.data[0]['id'])
 
     if not visits:
-        return JsonResponse({'message': 'Visit not found for this visitor.'}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'message': 'Visit not found for this visitor.'}, status=status.HTTP_204_NO_CONTENT)
 
     visits_serializer = VisitSerializer(visits, many=True)
     return JsonResponse(visits_serializer.data, safe=False)
@@ -134,7 +134,7 @@ def get_employees_visits(request):
     employees = employees.filter(name__icontains=name)
 
     if not employees:
-        return JsonResponse({'message': 'No visits found for this employee.'}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'message': 'No visits found for this employee.'}, status=status.HTTP_204_NO_CONTENT)
 
     employees_serializer = EmployeeSerializer(employees, many=True)
     return JsonResponse(employees_serializer.data, safe=False)
@@ -183,7 +183,7 @@ def visits_list(request):
                     visit['subs'][index] = user_serializer.data
                     index = index + 1
                 except User.DoesNotExist:
-                    return JsonResponse({'message': 'The user does not exists.'}, status=status.HTTP_404_NOT_FOUND)
+                    return JsonResponse({'message': 'The user does not exists.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return JsonResponse(visits_serializer.data, safe=False, status=status.HTTP_200_OK)
 
@@ -199,7 +199,7 @@ def visits_list(request):
                 visit_data['subs'][index] = user_serializer.data
                 index = index + 1
             except User.DoesNotExist:
-                return JsonResponse({'message': 'The user does not exists.'}, status=status.HTTP_404_NOT_FOUND)
+                return JsonResponse({'message': 'The user does not exists.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         visit_serializer = VisitSerializer(data=visit_data)
         if visit_serializer.is_valid():
@@ -248,7 +248,7 @@ def visit_detail(request, pk):
     try:
         visit = Visit.objects.get(pk=pk)
     except Visit.DoesNotExist:
-        return JsonResponse({'message': 'The visit does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'message': 'The visit does not exist'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     if request.method == 'GET':
         visit_serializer = VisitSerializer(visit)

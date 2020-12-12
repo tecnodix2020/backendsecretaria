@@ -54,7 +54,7 @@ def delete_message(request, pk):
     try:
         message = Message.objects.get(pk=pk)
     except Message.DoesNotExist:
-        return JsonResponse({'message': 'The message does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'message': 'The message does not exist.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     message.delete()
     return JsonResponse({'message': 'The message was deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
