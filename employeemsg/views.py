@@ -79,7 +79,7 @@ def send_notification(message):
     api_key = "AAAAccrA1zw:APA91bGcvv22bjwPkOyzPFOgABqJfGKqaC3VGjM7MnwvsvGARE2swIRA_VpkqgjR_GjnEh72InzVLjd38Ftsj88mIYC6i-gRnVzlNbfkgqqqaEDGN8yesylP1KqgdhfV0eXo-KtdXuT7"
     if 'status' in message.keys():
         api_key = "AAAAlPTIg0E:APA91bFv2KHSDlS6d0kjxXt2ycwMjoOlwmzo2-JKGN0YT-iLy1d88HVvhKrK_tubJUcRDNU0UEg00_O4NkruIrchHN2dnWKxtkfm9qMa4Jzd8818S4CTNSRo82LPumXBWbxvpLNtmr0D"
-        message['idEmployee'] = "-1"
+        message['idEmployee'] = "c64c3a05-41c9-460d-8254-c80216195b97"
     push_service = FCMNotification(api_key=api_key)
 
     try:
