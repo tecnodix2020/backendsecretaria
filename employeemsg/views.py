@@ -46,7 +46,7 @@ def msg_by_employee(request):
         return JsonResponse({'message': 'The request is not valid.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([AllowAny])
 def msg_emp_detail(request, pk):
     try:
@@ -60,6 +60,17 @@ def msg_emp_detail(request, pk):
     elif request.method == 'DELETE':
         message.delete()
         return JsonResponse({'message': 'The message was deleted successfully'}, status=status.HTTP_200_OK)
+    elif request.method == 'PUT':
+        message_data = JSONParser().parse(request)
+        msg_load_serializer = EmployeeMsgSerializer(message)
+        message_data['id'] = msg_load_serializer.data['id']
+        message_data['idMessage'] = msg_load_serializer.data['idMessage']
+        message_data['idEmployee'] = msg_load_serializer.data['idEmployee']
+        message_serializer = EmployeeMsgSerializer(message, data=message_data)
+        if message_serializer.is_valid():
+            message_serializer.save()
+            return JsonResponse(message_serializer.data)
+        return JsonResponse(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return JsonResponse({'message': 'The request is not valid.'}, status=status.HTTP_400_BAD_REQUEST)
 
