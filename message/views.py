@@ -34,20 +34,6 @@ def messages_list(request):
         return JsonResponse(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def post_message(request):
-    message_data = JSONParser().parse(request)
-    message_serializer = MessageSerializer(data=message_data)
-
-    if message_serializer.is_valid():
-        message_serializer.save()
-
-        return JsonResponse(message_serializer.data, status=status.HTTP_201_CREATED)
-
-    return JsonResponse(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 @api_view(['DELETE'])
 @permission_classes([AllowAny])
 def delete_message(request, pk):

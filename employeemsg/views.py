@@ -9,6 +9,10 @@ from rest_framework.permissions import AllowAny
 
 from employeemsg.models import EmployeeMessage
 from employeemsg.serializers import EmployeeMsgSerializer
+from message.models import Message
+from message.serializers import MessageSerializer
+from user.models import User
+from user.serializers import UserSerializer
 
 
 @api_view(['GET', 'POST'])
@@ -30,9 +34,12 @@ def msg_by_employee(request):
         message_serializer = EmployeeMsgSerializer(data=message_data)
 
         if message_serializer.is_valid():
-            message_serializer.save()
-            send_notification(message_serializer.data)
-            return JsonResponse(message_serializer.data, status=status.HTTP_201_CREATED)
+            if send_notification(message_serializer.validated_data):
+                message_serializer.save()
+                return JsonResponse(message_serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return JsonResponse({'message': 'Error sending the message to employee.'},
+                                    status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return JsonResponse(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
@@ -58,10 +65,24 @@ def msg_emp_detail(request, pk):
 
 
 def send_notification(message):
-    push_service = FCMNotification(api_key="AIzaSyDWOhxbvE3bDHLv8ymwRauWJOEM2EFkZ8I")
-    registration_id = "<device registration_id>"
-    message_title = "Uber update"
-    message_body = "Hi john, your customized news for today is ready"
+    push_service = FCMNotification(api_key="AAAAccrA1zw:APA91bGcvv22bjwPkOyzPFOgABqJfGKqaC3VGjM7MnwvsvGARE2swIRA_VpkqgjR_GjnEh72InzVLjd38Ftsj88mIYC6i-gRnVzlNbfkgqqqaEDGN8yesylP1KqgdhfV0eXo-KtdXuT7")
+    try:
+        user = User.objects.get(id=message['idEmployee'])
+        user_serializer = UserSerializer(user)
+    except User.DoesNotExist:
+        return JsonResponse({'message': 'The user does not exists.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    registration_id = user_serializer.data['appToken']
+    try:
+        message = Message.objects.get(id=message['idMessage'])
+        message_serializer = MessageSerializer(message)
+    except Message.DoesNotExist:
+        return JsonResponse({'message': 'It is not possible to send the message, it does not exist.'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    message_title = message_serializer.data['title']
+    message_body = message_serializer.data['description']
     result = push_service.notify_single_device(registration_id=registration_id, message_title=message_title,
                                                message_body=message_body)
-    print(result)
+    if result['success'] == 1:
+        return True
+    else:
+        return False
