@@ -76,19 +76,26 @@ def msg_emp_detail(request, pk):
 
 
 def send_notification(message):
-    push_service = FCMNotification(api_key="AAAAccrA1zw:APA91bGcvv22bjwPkOyzPFOgABqJfGKqaC3VGjM7MnwvsvGARE2swIRA_VpkqgjR_GjnEh72InzVLjd38Ftsj88mIYC6i-gRnVzlNbfkgqqqaEDGN8yesylP1KqgdhfV0eXo-KtdXuT7")
+    api_key = "AAAAccrA1zw:APA91bGcvv22bjwPkOyzPFOgABqJfGKqaC3VGjM7MnwvsvGARE2swIRA_VpkqgjR_GjnEh72InzVLjd38Ftsj88mIYC6i-gRnVzlNbfkgqqqaEDGN8yesylP1KqgdhfV0eXo-KtdXuT7"
+    if 'status' in message.keys():
+        api_key = "AAAAlPTIg0E:APA91bFv2KHSDlS6d0kjxXt2ycwMjoOlwmzo2-JKGN0YT-iLy1d88HVvhKrK_tubJUcRDNU0UEg00_O4NkruIrchHN2dnWKxtkfm9qMa4Jzd8818S4CTNSRo82LPumXBWbxvpLNtmr0D"
+        message['idEmployee'] = "-1"
+    push_service = FCMNotification(api_key=api_key)
+
     try:
         user = User.objects.get(id=message['idEmployee'])
         user_serializer = UserSerializer(user)
     except User.DoesNotExist:
         return JsonResponse({'message': 'The user does not exists.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     registration_id = user_serializer.data['appToken']
+
     try:
         message = Message.objects.get(id=message['idMessage'])
         message_serializer = MessageSerializer(message)
     except Message.DoesNotExist:
         return JsonResponse({'message': 'It is not possible to send the message, it does not exist.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     message_title = message_serializer.data['title']
     message_body = message_serializer.data['description']
     result = push_service.notify_single_device(registration_id=registration_id, message_title=message_title,
