@@ -34,8 +34,6 @@ def msg_by_employee(request):
         message_serializer = EmployeeMsgSerializer(data=message_data)
 
         if message_serializer.is_valid():
-            if 'status' in message_serializer.validated_data.keys():
-                message_serializer.validated_data['idEmployee'] = "c64c3a05-41c9-460d-8254-c80216195b97"
             if send_notification(message_serializer.validated_data):
                 message_serializer.save()
                 return JsonResponse(message_serializer.data, status=status.HTTP_201_CREATED)
