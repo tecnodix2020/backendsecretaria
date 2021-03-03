@@ -17,6 +17,9 @@ Lisa Project uses a number of open source projects to work properly:
 * [django-cors-headers](https://pypi.org/project/django-cors-headers/) - A Django App that adds Cross-Origin Resource Sharing (CORS) headers to responses. This allows in-browser requests to your Django application from other origins.
 * [django-rest-swagger](https://django-rest-swagger.readthedocs.io/en/latest/) - Swagger/OpenAPI Documentation Generator for Django REST Framework.
 * [django-rest-framework-jwt](https://github.com/jpadilla/django-rest-framework-jwt) - JSON Web Token Authentication support for Django REST Framework.
+* [fcm-django](https://fcm-django.readthedocs.io/en/latest/) - Django app for Firebase Cloud Messaging. Used as an unified platform for sending push notifications to mobile devices (android / ios)
+* [dnspython](https://pypi.org/project/dnspython/) - dnspython is a DNS toolkit for Python. It supports almost all record types. It can be used for queries, zone transfers, and dynamic updates. It supports TSIG authenticated messages and EDNS0.
+dnspython provides both high and low level access to DNS. The high level classes perform queries for data of a given name, type, and class, and return an answer set. The low level classes allow direct manipulation of DNS zones, messages, names, and records.
 
 ### Installation
 

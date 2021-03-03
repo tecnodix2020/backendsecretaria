@@ -2,8 +2,8 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 
-from employee.models import Employee
-from employee.serializers import EmployeeSerializer
+from apps.employee.models import Employee
+from apps.employee.serializers import EmployeeSerializer
 
 
 @api_view(['GET'])

@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import sys
 import datetime
 from pathlib import Path
 import urllib
@@ -53,7 +54,7 @@ INSTALLED_APPS = [
     'fcm_django',
     # Apps
     'company',
-    'employee',
+    'apps.employee',
     'user',
     'visit',
     'visitsubs',

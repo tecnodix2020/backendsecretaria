@@ -6,7 +6,7 @@ from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
-from employee.serializers import EmployeeSerializer
+from apps.employee.serializers import EmployeeSerializer
 from user.models import User
 from user.serializers import UserSerializer
 from rest_framework.decorators import api_view, permission_classes

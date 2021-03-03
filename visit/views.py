@@ -12,8 +12,8 @@ from visit.serializers import VisitSerializer
 from visitor.models import Visitor
 from visitor.serializers import VisitorSerializer
 
-from employee.models import Employee
-from employee.serializers import EmployeeSerializer
+from apps.employee.models import Employee
+from apps.employee.serializers import EmployeeSerializer
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
