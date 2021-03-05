@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     # FCM Notification
     'fcm_django',
     # Apps
-    'company',
+    'apps.company',
     'apps.employee',
     'user',
     'visit',

@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^docs/$', schema_view),
     url(r'^', include('visit.urls')),
-    url(r'^', include('company.urls')),
+    url(r'^', include('apps.company.urls')),
     url(r'^', include('apps.employee.urls')),
     url(r'^', include('user.urls')),
     url(r'^', include('message.urls')),
