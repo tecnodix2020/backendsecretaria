@@ -7,12 +7,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import AllowAny
 
-from employeemsg.models import EmployeeMessage
-from employeemsg.serializers import EmployeeMsgSerializer
-from message.models import Message
-from message.serializers import MessageSerializer
-from user.models import User
-from user.serializers import UserSerializer
+from apps.employeemsg.models import EmployeeMessage
+from apps.employeemsg.serializers import EmployeeMsgSerializer
+from apps.message.models import Message
+from apps.message.serializers import MessageSerializer
+from apps.user.models import User
+from apps.user.serializers import UserSerializer
 
 
 @api_view(['GET', 'POST'])

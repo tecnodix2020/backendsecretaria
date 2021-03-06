@@ -4,13 +4,13 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 import json
 
-from user.models import User
-from user.serializers import UserSerializer, UserVisitSerializer
-from visit.models import Visit
-from visit.serializers import VisitSerializer
+from apps.user.models import User
+from apps.user.serializers import UserSerializer, UserVisitSerializer
+from apps.visit.models import Visit
+from apps.visit.serializers import VisitSerializer
 
-from visitor.models import Visitor
-from visitor.serializers import VisitorSerializer
+from apps.visitor.models import Visitor
+from apps.visitor.serializers import VisitorSerializer
 
 from apps.employee.models import Employee
 from apps.employee.serializers import EmployeeSerializer
@@ -24,7 +24,7 @@ import uuid
 import datetime
 from datetime import date
 
-from visitsubs.serializers import VisitSubsSerializer
+from apps.visitsubs.serializers import VisitSubsSerializer
 
 
 @api_view(['GET'])

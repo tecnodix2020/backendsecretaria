@@ -1,6 +1,6 @@
 from djongo import models
 
-from user.models import User
+from apps.user.models import User
 from utils.enumerators import TypesVisits, StatusVisits
 
 import datetime

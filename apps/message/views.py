@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 
-from message.models import Message
-from message.serializers import MessageSerializer
+from apps.message.models import Message
+from apps.message.serializers import MessageSerializer
 
 
 @api_view(['GET', 'POST'])

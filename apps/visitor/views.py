@@ -6,8 +6,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import AllowAny
 
-from visitor.models import Visitor
-from visitor.serializers import VisitorSerializer
+from apps.visitor.models import Visitor
+from apps.visitor.serializers import VisitorSerializer
 
 
 @api_view(['GET', 'POST'])

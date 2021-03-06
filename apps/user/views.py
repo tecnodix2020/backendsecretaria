@@ -7,8 +7,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 
 from apps.employee.serializers import EmployeeSerializer
-from user.models import User
-from user.serializers import UserSerializer
+from apps.user.models import User
+from apps.user.serializers import UserSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_jwt.settings import api_settings
 

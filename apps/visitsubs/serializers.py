@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from visitsubs.models import VisitSubs
+from apps.visitsubs.models import VisitSubs
 
 
 class VisitSubsSerializer(serializers.ModelSerializer):

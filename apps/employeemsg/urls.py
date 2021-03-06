@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from employeemsg import views
+from apps.employeemsg import views
 
 urlpatterns = [
   url(r'^msgsbyemployee$', views.msg_by_employee),

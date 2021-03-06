@@ -55,12 +55,12 @@ INSTALLED_APPS = [
     # Apps
     'apps.company',
     'apps.employee',
-    'user',
-    'visit',
-    'visitsubs',
-    'visitor',
-    'message',
-    'employeemsg'
+    'apps.user',
+    'apps.visit',
+    'apps.visitsubs',
+    'apps.visitor',
+    'apps.message',
+    'apps.employeemsg'
 ]
 
 MIDDLEWARE = [

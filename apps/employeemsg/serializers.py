@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from employeemsg.models import EmployeeMessage
+from apps.employeemsg.models import EmployeeMessage
 
 
 class EmployeeMsgSerializer(serializers.ModelSerializer):
