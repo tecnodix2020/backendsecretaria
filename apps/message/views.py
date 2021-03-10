@@ -9,9 +9,9 @@ from apps.message.models import Message
 from apps.message.serializers import MessageSerializer
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([AllowAny])
-def messages_list(request):
+def messages_list(request, pk=None):
     if request.method == 'GET':
         type_message = request.GET.get('type', None)
 
@@ -31,16 +31,13 @@ def messages_list(request):
 
             return JsonResponse(message_serializer.data, status=status.HTTP_201_CREATED)
 
-        return JsonResponse(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        try:
+            message = Message.objects.get(pk=pk)
+        except Message.DoesNotExist:
+            return JsonResponse({'message': 'The message does not exist.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-@api_view(['DELETE'])
-@permission_classes([AllowAny])
-def delete_message(request, pk):
-    try:
-        message = Message.objects.get(pk=pk)
-    except Message.DoesNotExist:
-        return JsonResponse({'message': 'The message does not exist.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    message.delete()
-    return JsonResponse({'message': 'The message was deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        message.delete()
+        return JsonResponse({'message': 'The message was deleted successfully'}, status=status.HTTP_200_OK)
+    
+    return JsonResponse(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

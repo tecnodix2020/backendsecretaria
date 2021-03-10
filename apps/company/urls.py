@@ -3,5 +3,5 @@ from apps.company import views
 
 
 urlpatterns = [
-    url(r'^company/companies$', views.companies_list)
+    url(r'^company$', views.companies_list)
 ]
