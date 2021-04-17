@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class VisitsubsConfig(AppConfig):
-    name = 'visitsubs'
+    name = 'apps.visitsubs'

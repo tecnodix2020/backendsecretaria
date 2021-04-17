@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class VisitorConfig(AppConfig):
-    name = 'visitor'
+    name = 'apps.visitor'
